@@ -61,11 +61,15 @@ MatrixMax12d CollisionConstraint::compute_potential_hessian(
     assert(hess_b >= 0);
     MatrixMax12d term1 = hess_b * distance_grad * distance_grad.transpose();
     MatrixMax12d term2 = grad_b * distance_hess;
+    MatrixMax12d term12 = term1 + term2;
     if (project_hessian_to_psd) {
-        term2 = project_to_psd(term2);
+        //term2 = project_to_psd(term2);
+        //term2 = project_to_pd(term2, 1e-5);
+        term12 = project_to_pd(term12, 1e-4);
     }
 
-    return weight * (term1 + term2);
+    //return weight * (term1 + term2);
+    return weight * term12;
 }
 
 } // namespace ipc

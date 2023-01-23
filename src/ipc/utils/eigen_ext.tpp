@@ -34,13 +34,13 @@ project_to_pd(
     }
     // Check if all eigen values are positive.
     // The eigenvalues are sorted in increasing order.
-    if (eigensolver.eigenvalues()[0] > 0.0) {
+    if (eigensolver.eigenvalues()[0] > eps) {
         return A;
     }
     Eigen::DiagonalMatrix<double, Eigen::Dynamic> D(eigensolver.eigenvalues());
     // Save a little time and only project the negative or zero values
     for (int i = 0; i < A.rows(); i++) {
-        if (D.diagonal()[i] <= 0.0) {
+        if (D.diagonal()[i] < eps) {
             D.diagonal()[i] = eps;
         } else {
             break;
